@@ -75,4 +75,8 @@ dependencies {
     implementation("androidx.glance:glance:1.1.0-alpha01")
     implementation("androidx.glance:glance-appwidget:1.1.0-alpha01")
 
+
+    //splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 }

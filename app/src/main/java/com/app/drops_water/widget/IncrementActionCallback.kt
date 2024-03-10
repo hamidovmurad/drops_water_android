@@ -25,13 +25,8 @@ class IncrementActionCallback: ActionCallback {
             val currentCount = prefs[TrackerWidget.countKey]
 
             currentCount?.let {
-                if(currentCount == 11) {
-                    prefs[TrackerWidget.countKey] = 0
-                    preferences.setCount(0)
-                }else {
-                    preferences.setCount(currentCount + 1)
-                    prefs[TrackerWidget.countKey] = currentCount + 1
-                }
+                preferences.setCount(currentCount + 1)
+                prefs[TrackerWidget.countKey] = currentCount + 1
             }?: run{
                 val newCount = preferences.getCount() + 1
                 prefs[TrackerWidget.countKey] = newCount

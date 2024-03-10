@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Drops_water_android" parent="android:Theme.Material.Light.NoActionBar" />
+
+
+    <style name="SplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/Theme.Drops_water_android</item>
+
+        <!-- Status bar and Nav bar configs -->
+        <item name="android:statusBarColor" >@color/blue</item>
+        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/splash_branded</item>
+    </style>
+
 </resources>

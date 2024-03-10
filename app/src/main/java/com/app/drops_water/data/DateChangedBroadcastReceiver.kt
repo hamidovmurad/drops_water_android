@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -54,6 +55,8 @@ fun Context.scheduleAlarm() {
 
     val INTERVAL = getMillisecondsTillNextMidnight()
     val UNIQUE_REQUEST_CODE =  1000
+
+    Log.e("TAG_ALARM", "scheduleAlarm: $INTERVAL", )
 
     val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val alarmIntent = Intent(this, DateChangedBroadcastReceiver::class.java)
