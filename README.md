@@ -10,11 +10,11 @@ Drops Water Tracker is a simple Android app designed to help users track their d
 - **Visual Progress:** Monitor your daily water intake with a visual progress indicator.
 
 ## Screenshots
-
-![Screen 1](screenshots/screen1.png)
-![Screen 2](screenshots/screen2.png)
-![Screen 3](screenshots/screen3.png)
-
+<p float="left">
+<img src="screenshots/screen1.png" alt="Screen 1" width="200">
+<img src="screenshots/screen2.png" alt="Screen 2" width="200">
+<img src="screenshots/screen3.png" alt="Screen 3" width="200">
+</p>
 
 ### Clone the repository
 
