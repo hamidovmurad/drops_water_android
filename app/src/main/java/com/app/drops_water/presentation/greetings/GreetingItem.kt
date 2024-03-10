@@ -70,7 +70,8 @@ fun AddInfo(
 
         TextFieldApp(
             hint = stringResource(R.string.daily_goal_by_glass),
-            keyboardType = KeyboardType.Number
+            maxChar = 2,
+            keyboardType = KeyboardType.NumberPassword
         ){ value->
             onGoalChanged(value)
         }

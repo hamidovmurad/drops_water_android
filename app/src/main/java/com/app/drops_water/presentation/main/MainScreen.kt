@@ -58,8 +58,8 @@ fun MainScreen(
     val data by viewModel.data.collectAsState()
 
     val goal = data.second
-    var currentNumber by rememberSaveable { mutableStateOf(data.third) }
-    val count = currentNumber*10/goal
+    var count by rememberSaveable { mutableStateOf(data.third) }
+    val countPercent = count*10/goal
 
 
     Column(
@@ -118,7 +118,7 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(
-            text = stringResource(R.string.your_daily_goal,currentNumber,goal),
+            text = stringResource(R.string.your_daily_goal,count,goal),
             color = Black,
             fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
             fontSize = 20.sp,
@@ -151,9 +151,9 @@ fun MainScreen(
                         verticalAlignment = Alignment.Bottom
                     ) {
 
-                        if (it == (count-1) || (it==0 && (count-1) ==-1 && currentNumber>0)) {
+                        if (it == (countPercent-1) || (it==0 && (countPercent-1) ==-1 && count>0)) {
                             Text(
-                                text = stringResource(R.string.glass, currentNumber),
+                                text = stringResource(R.string.glass, count),
                                 color = Black,
                                 fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
                                 fontSize = 18.sp,
@@ -180,8 +180,8 @@ fun MainScreen(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier.weight(1f)
             ){
-                if(count>0) {
-                    val img = DisplayWaterImage(count)
+                if(countPercent>0) {
+                    val img = DisplayWaterImage(countPercent)
                     Image(
                         painter = painterResource(id = img),
                         contentDescription = "water",
@@ -200,11 +200,11 @@ fun MainScreen(
 
         ActionButton(
             title = stringResource(id = R.string.add_1),
-            color = if(currentNumber<goal)Blue else if(currentNumber<20) Green else Red,
+            color = if(count<goal)Blue else if(count<20) Green else Red,
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         ) {
-            currentNumber++
-            viewModel.setCurrent(currentNumber)
+            count++
+            viewModel.setCount(count)
         }
 
         Spacer(modifier = Modifier

@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+
     <application
-        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,6 +29,7 @@
         </activity>
 
 
+        <receiver android:name=".data.DateChangedBroadcastReceiver"/>
 
         <receiver android:name=".widget.CounterWidgetReceiver" android:exported="true">
             <intent-filter>

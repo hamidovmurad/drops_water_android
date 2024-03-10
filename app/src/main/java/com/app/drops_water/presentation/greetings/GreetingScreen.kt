@@ -1,6 +1,5 @@
 package com.app.drops_water.presentation.greetings
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,9 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.drops_water.R
 import com.app.drops_water.navigations.Route
@@ -33,12 +30,14 @@ import com.app.drops_water.ui.theme.Blue
 import com.app.drops_water.ui.theme.Grey
 import kotlinx.coroutines.launch
 
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GreetingScreen(
     viewModel: TrackerViewModel,
     onNavigate :(UiEvent.Navigate)->Unit
 ){
+
 
     val errorMessage = stringResource(R.string.the_goal_must_be_greater_than_0)
 
@@ -104,13 +103,15 @@ fun GreetingScreen(
             title = stringResource(id = buttonName),
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)) {
 
+
             if (pagerState.currentPage == 0 || pagerState.currentPage<3) {
                 scope.launch {
                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
                 }
             }else {
                 if (textGoal.isNotBlank() && textGoal.toInt()>0) {
-                    viewModel.setInfo(textName, textGoal.toInt()).runCatching {
+                    viewModel.setTimer()
+                    viewModel.setData(textName, textGoal.toInt()).runCatching {
                         onNavigate(UiEvent.Navigate(Route.MAIN))
                     }
                 }else{

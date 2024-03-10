@@ -5,11 +5,11 @@ interface Preferences {
 
     fun getGoal():Int
 
-    fun getCurrent():Int
+    fun getCount():Int
 
     fun getDatetime():Long
 
-    fun setCurrent(current:Int)
+    fun setCount(count:Int)
 
     fun setData(fullname:String,goal:Int)
 
@@ -22,7 +22,7 @@ interface Preferences {
         const val PREF_NAME = "shared_pref"
         const val KEY_FULLNAME = "fullname"
         const val KEY_GOAL = "goal"
-        const val KEY_CURRENT = "current"
+        const val KEY_COUNT = "count"
         const val KEY_DATETIME = "datetime"
     }
 }

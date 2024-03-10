@@ -72,7 +72,7 @@ fun SettingsScreen(
             TextFieldApp(
                 textGoal,hint =  stringResource(id = R.string.daily_goal_by_glass),
                 maxChar = 2,
-                keyboardType = KeyboardType.Number
+                keyboardType = KeyboardType.NumberPassword
                 ) { value ->
                 textGoal = value
             }
@@ -83,7 +83,7 @@ fun SettingsScreen(
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         ) {
             if (textGoal.isNotBlank() && textGoal.toInt()>0) {
-                viewModel.setInfo(textName,textGoal.toInt()).runCatching {
+                viewModel.setData(textName,textGoal.toInt()).runCatching {
                     onBackPress()
                 }
 

@@ -9,14 +9,14 @@ class DefaultPreferences(
 
     override fun getGoal(): Int = sharedPref.getInt(Preferences.KEY_GOAL,0)
 
-    override fun getCurrent(): Int = sharedPref.getInt(Preferences.KEY_CURRENT,0)
+    override fun getCount(): Int = sharedPref.getInt(Preferences.KEY_COUNT,0)
 
     override fun getDatetime(): Long = sharedPref.getLong(Preferences.KEY_DATETIME,-1)
 
 
-    override fun setCurrent(current: Int) {
+    override fun setCount(count: Int) {
         sharedPref.edit()
-            .putInt(Preferences.KEY_CURRENT,current)
+            .putInt(Preferences.KEY_COUNT,count)
             .apply()
         sharedPref.edit()
             .putLong(Preferences.KEY_DATETIME, System.currentTimeMillis())
@@ -36,12 +36,12 @@ class DefaultPreferences(
     override fun getData(): Triple<String,Int,Int> {
         val fullname = sharedPref.getString(Preferences.KEY_FULLNAME,"")?:""
         val goal = sharedPref.getInt(Preferences.KEY_GOAL,0)
-        val current = sharedPref.getInt(Preferences.KEY_CURRENT,0)
+        val count = sharedPref.getInt(Preferences.KEY_COUNT,0)
 
         return Triple(
             fullname,
             goal,
-            current
+            count
         )
     }
 

@@ -1,19 +1,28 @@
 package com.app.drops_water.presentation
 
+import android.app.AlarmManager
 import android.app.Application
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.drops_water.data.DateChangedBroadcastReceiver
+import com.app.drops_water.data.longToStringDate
 import com.app.drops_water.data.preferences.Preferences
+import com.app.drops_water.data.scheduleAlarm
 import com.app.drops_water.widget.TrackerWidget
+import com.app.drops_water.widget.TrackerWidget.KEY_WIDGET_COUNT
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.Calendar
+
 
 class TrackerViewModel(
     private val application: Application,
@@ -21,32 +30,31 @@ class TrackerViewModel(
 ): ViewModel(){
 
 
-    private val _data = MutableStateFlow<Triple<String,Int,Int>>(Triple("",0,0))
+    private val _data = MutableStateFlow(Triple("",0,0))
     val data = _data.asStateFlow()
 
-    private val _datetime = MutableStateFlow<String>("")
+    private val _datetime = MutableStateFlow("")
     val datetime = _datetime.asStateFlow()
-
 
 
     fun isSetUp():Boolean = preferences.isSetUp()
 
-    fun setCurrent( current:Int)= viewModelScope.launch {
+    fun setCount(count:Int)= viewModelScope.launch {
         GlanceAppWidgetManager(application)
             .getGlanceIds(TrackerWidget::class.java).firstOrNull()?.let { glanceId->
                 updateAppWidgetState(application, glanceId) { prefs ->
-                    prefs[intPreferencesKey("count")] = current
+                    prefs[intPreferencesKey(KEY_WIDGET_COUNT)] = count
                 }
                 TrackerWidget.update(application, glanceId)
             }
-        preferences.setCurrent(current)
+        preferences.setCount(count)
     }
 
-    fun setInfo(
-        fullname :String,
-        goal:Int
+    fun setData(
+        fullName :String,
+        goal:Int,
     ) = viewModelScope.launch {
-        preferences.setData(fullname, goal)
+        preferences.setData(fullName, goal)
         GlanceAppWidgetManager(application)
             .getGlanceIds(TrackerWidget::class.java).firstOrNull()?.let { glanceId->
                 TrackerWidget.update(application, glanceId)
@@ -58,11 +66,7 @@ class TrackerViewModel(
         val data = preferences.getData()
         _data.emit(data)
 
-        if (preferences.getDatetime()!=-1L){
-            val sdf = SimpleDateFormat("E, dd MMM yyyy, hh:mm a")
-            val netDate = Date(preferences.getDatetime())
-            _datetime.emit(sdf.format(netDate))
-        }else   _datetime.emit("Not Found!")
+        _datetime.emit(preferences.getDatetime().longToStringDate())
 
     }
 
@@ -71,6 +75,12 @@ class TrackerViewModel(
     fun showToast(message:String){
         Toast.makeText(application, message, Toast.LENGTH_SHORT).show()
     }
+
+
+    fun setTimer() = viewModelScope.launch {
+        application.scheduleAlarm()
+    }
+
 
 
 
