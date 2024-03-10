@@ -14,5 +14,20 @@
     <string name="login_title">Create your goal</string>
     <string name="login_description">Staying hydrated every day is easy with Drops Water Tracker.</string>
 
+    <string name="next">Next</string>
+    <string name="get_started">Get Started</string>
+    <string name="daily_goal_by_glass">Daily goal (by glass 250ml)</string>
+    <string name="full_name">Full name</string>
+    <string name="save">Save</string>
+    <string name="edit_your_data">Edit your data</string>
+    <string name="your_daily_goal">Your Daily Goal (%1$d/%2$d)</string>
+    <string name="edit_goal">Edit goal</string>
+    <string name="glass">%1$s glass —></string>
+    <string name="last_drinking_time">Last drinking time</string>
+    <string name="welcome_back">Welcome Back,</string>
+    <string name="the_goal_must_be_greater_than_0">The goal must be greater than 0!</string>
+    <string name="goal_not_set">Goal not set!</string>
+    <string name="add_1">Add +1</string>
+
 
 </resources>

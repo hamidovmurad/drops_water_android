@@ -72,7 +72,7 @@ dependencies {
 
 
     //widget
-    implementation("androidx.glance:glance:1.0.0-alpha05")
-    implementation("androidx.glance:glance-appwidget:1.0.0-alpha05")
+    implementation("androidx.glance:glance-appwidget:1.0.0")
+    implementation("androidx.glance:glance-material3:1.0.0")
 
 }

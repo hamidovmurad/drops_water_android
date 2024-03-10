@@ -9,6 +9,4 @@ object Route {
     const val MAIN ="main"
 
     const val SETTINGS ="settings"
-
-    const val ANALYSIS ="analysis"
 }

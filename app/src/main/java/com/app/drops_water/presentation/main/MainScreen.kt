@@ -1,7 +1,6 @@
 package com.app.drops_water.presentation.main
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,18 +27,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.drops_water.R
 import com.app.drops_water.navigations.Route
 import com.app.drops_water.navigations.UiEvent
 import com.app.drops_water.presentation.ActionButton
+import com.app.drops_water.presentation.DisplayWaterImage
 import com.app.drops_water.presentation.SubTitle
 import com.app.drops_water.presentation.TopAppBarApp
+import com.app.drops_water.presentation.TrackerViewModel
 import com.app.drops_water.ui.theme.Black
 import com.app.drops_water.ui.theme.Blue
 import com.app.drops_water.ui.theme.GrayDark
@@ -48,9 +50,16 @@ import com.app.drops_water.ui.theme.White
 
 
 @Composable
-fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
+fun MainScreen(
+    viewModel: TrackerViewModel,
+    onNavigate:(UiEvent.Navigate)->Unit){
 
-    var currentNumber by rememberSaveable { mutableStateOf(0) }
+    viewModel.getData()
+    val data by viewModel.data.collectAsState()
+
+    val goal = data.second
+    var currentNumber by rememberSaveable { mutableStateOf(data.third) }
+    val count = currentNumber*10/goal
 
 
     Column(
@@ -60,11 +69,8 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
         Spacer(modifier = Modifier.height(16.dp))
 
         TopAppBarApp(
-            "☀ ☼ ☽ ☁ Good Morning,",
-            "Adam Smith",
-            onActionAnalysis = {
-                onNavigate(UiEvent.Navigate(Route.ANALYSIS))
-            },
+            stringResource(R.string.welcome_back),
+            data.first,
             onActionSettings = {
                 onNavigate(UiEvent.Navigate(Route.SETTINGS))
             })
@@ -81,16 +87,14 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
                     contentScale = ContentScale.FillBounds
                 )
                 .padding(16.dp)
-
         ){
 
-
-            Text(text = "Today - 11:00 am",
+            Text(text = viewModel.datetime.collectAsState().value,
                 color = Black,
                 fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
-                fontSize = 20.sp
+                fontSize = 16.sp
             )
-            Text(text = "Last drinking time",
+            Text(text = stringResource(R.string.last_drinking_time),
                 color = GrayDark,
                 fontFamily = FontFamily(Font(R.font.inter_medium)),
                 fontSize = 14.sp
@@ -103,20 +107,18 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
                 onClick = {
                     onNavigate(UiEvent.Navigate(Route.SETTINGS))
                 }) {
-                Text(text = "Edit goal",
+                Text(text = stringResource(R.string.edit_goal),
                     color = Black,
                     fontFamily = FontFamily(Font(R.font.inter_medium)),
                     fontSize = 12.sp
                 )
             }
-
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-
         Text(
-            text = "Your Daily Goal (%)",
+            text = stringResource(R.string.your_daily_goal,currentNumber,goal),
             color = Black,
             fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
             fontSize = 20.sp,
@@ -149,9 +151,9 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
                         verticalAlignment = Alignment.Bottom
                     ) {
 
-                        if (it == currentNumber-1) {
+                        if (it == (count-1) || (it==0 && (count-1) ==-1 && currentNumber>0)) {
                             Text(
-                                text = "$currentNumber glass -->",
+                                text = stringResource(R.string.glass, currentNumber),
                                 color = Black,
                                 fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
                                 fontSize = 18.sp,
@@ -159,14 +161,13 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
                             )
                         }
                         Text(
-                            text = "${(it + 1) * 10} ―――",
+                            text = "${(it + 1) * 10}% ―――",
                             color = Black,
                             fontFamily = FontFamily(Font(R.font.inter_semi_bold)),
                             fontSize = 12.sp,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.End
                         )
-
                     }
 
                 }
@@ -179,33 +180,15 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier.weight(1f)
             ){
-
-
-                if(currentNumber>0) {
-                    val img = when (currentNumber) {
-                        1 -> R.drawable.ic_water10
-                        2 -> R.drawable.ic_water20
-                        3 -> R.drawable.ic_water30
-                        4 -> R.drawable.ic_water40
-                        5 -> R.drawable.ic_water50
-                        6 -> R.drawable.ic_water60
-                        7 -> R.drawable.ic_water70
-                        8 -> R.drawable.ic_water80
-                        9 -> R.drawable.ic_water90
-                        10 -> R.drawable.ic_water100
-                        else -> R.drawable.ic_water100
-                    }
-
+                if(count>0) {
+                    val img = DisplayWaterImage(count)
                     Image(
                         painter = painterResource(id = img),
                         contentDescription = "water",
                     )
                 }
-
-
                 Image(painter = painterResource(id = R.drawable.ic_glass),
                     contentDescription ="glass" )
-
             }
 
 
@@ -216,30 +199,26 @@ fun MainScreen(onNavigate:(UiEvent.Navigate)->Unit){
 
 
         ActionButton(
-            title = "Add +1 ($currentNumber/10)",
-            color = if(currentNumber<10)Blue else if(currentNumber<20) Green else Red,
+            title = stringResource(id = R.string.add_1),
+            color = if(currentNumber<goal)Blue else if(currentNumber<20) Green else Red,
             modifier = Modifier.padding(start = 24.dp, end = 24.dp)
         ) {
             currentNumber++
+            viewModel.setCurrent(currentNumber)
         }
 
         Spacer(modifier = Modifier
             .height(16.dp))
         
-        SubTitle(subtitle = "You got 60% of today’s goal, keep focus on your health!",
+        SubTitle(subtitle = stringResource(
+            R.string.greeting_description3,
+            goal
+        ),
            modifier = Modifier.padding(start = 24.dp, end = 24.dp) )
 
         Spacer(modifier = Modifier
             .height(24.dp))
 
     }
-
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Prev(){
-    MainScreen{}
 
 }

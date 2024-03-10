@@ -1,7 +1,6 @@
 package com.app.drops_water.presentation
 
 import androidx.compose.foundation.background
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -26,16 +26,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.drops_water.R
-import com.app.drops_water.ui.theme.*
+import com.app.drops_water.ui.theme.Black
+import com.app.drops_water.ui.theme.Blue
+import com.app.drops_water.ui.theme.BlueLight2
+import com.app.drops_water.ui.theme.Gray
+import com.app.drops_water.ui.theme.GrayDark
+import com.app.drops_water.ui.theme.White
 
 
 @Composable
@@ -58,7 +65,6 @@ fun TopAppBarApp(
     subtitle:String? = null,
     title:String? = null,
     onBackClick:(()-> Unit)? = null,
-    onActionAnalysis:(()->Unit)? = null,
     onActionSettings:(()->Unit)? = null,
 ){
     Column {
@@ -101,22 +107,6 @@ fun TopAppBarApp(
                     }
             }},
             actions = {
-                onActionAnalysis?.let{
-                    IconButton(onClick = {
-                        it.invoke()
-                    }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_chart),
-                            contentDescription = "chart",
-                            modifier = Modifier
-                                .size(42.dp)
-                                .clip(CircleShape)
-                                .background(White)
-                                .padding(10.dp)
-                        )
-                    }
-                }
-
                 onActionSettings?.let{
                     IconButton(onClick = {
                         it.invoke()
@@ -171,12 +161,15 @@ fun ActionButton(
 
 @Composable
 fun TextFieldApp(
+    text :String = "",
     hint:String,
+    maxChar :Int = 24,
+    keyboardType: KeyboardType = KeyboardType.Text,
     modifier: Modifier = Modifier,
     onValueChange:(value:String)->Unit
 ) {
 
-    var text by rememberSaveable { mutableStateOf("") }
+    var text by rememberSaveable { mutableStateOf(text) }
 
 
     Column {
@@ -193,8 +186,10 @@ fun TextFieldApp(
         OutlinedTextField(
             value = text,
             onValueChange = {
-                text = it
-                onValueChange(it)
+                if (it.trim().length <= maxChar) {
+                    text = it
+                    onValueChange(it)
+                }
             },
 
             placeholder = {
@@ -206,6 +201,7 @@ fun TextFieldApp(
                     color = Gray
                 )
             },
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
             colors = TextFieldDefaults.textFieldColors(
@@ -225,6 +221,23 @@ fun TextFieldApp(
 }
 
 
+@Composable
+fun DisplayWaterImage(count :Int):Int {
+        return when (count) {
+            1 -> R.drawable.ic_water10
+            2 -> R.drawable.ic_water20
+            3 -> R.drawable.ic_water30
+            4 -> R.drawable.ic_water40
+            5 -> R.drawable.ic_water50
+            6 -> R.drawable.ic_water60
+            7 -> R.drawable.ic_water70
+            8 -> R.drawable.ic_water80
+            9 -> R.drawable.ic_water90
+            10 -> R.drawable.ic_water100
+            else -> R.drawable.ic_water100
+        }
+}
+
 
 
 
@@ -232,7 +245,7 @@ fun TextFieldApp(
 @Composable
 fun PreviewItem(){
     Column {
-        TextFieldApp("Phone number"){}
+        TextFieldApp(hint = "Phone number"){}
         TopAppBarApp(onBackClick = {}, title = "Hello title")
         ActionButton(title = "Hello") {}
     }
